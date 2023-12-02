@@ -4,12 +4,52 @@
 
 @layer base {
   :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
+    --primary: hsl(240, 10%, 10%);
+    --foreground: hsl(0 0% 100% 0.8);
+    --muted: hsl(0, 0%, 96%);
+    --muted-faded: hsl(0, 0%, 96%, 0.5);
+    --muted-border: hsl(220, 13%, 91%);
+    --muted-foreground: hsl(240 3.8% 46.1%);
+    --muted-background: hsl(240, 10%, 4%);
   }
 
   body {
-    color: #000;
+    color: var(--muted-background);
+  }
+
+  .table-header {
+    @apply flex flex-row justify-start items-center font-medium text-[var(--muted-foreground)];
+  }
+
+  .table-body {
+    @apply flex flex-row justify-start items-center font-medium text-[var(--muted-background)];
+  }
+
+  .shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  }
+
+  .transition-colors {
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.15s;
+  }
+
+  .blurify {
+    backdrop-filter: blur(3px);
+    background-color: rgba(255, 255, 255, 0.707);
+  }
+
+  .modal-form-ring {
+    @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 col-span-3;
   }
 }
+
+/* rows-  transition-colors duration-200 ease-in-out hover:bg-[var(--muted)]; */
