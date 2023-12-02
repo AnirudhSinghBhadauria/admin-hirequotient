@@ -1,16 +1,9 @@
 import React from "react";
 import UserPanel from "@/components/users-panel";
 import { getUsers } from "@/lib/hooks/get-users";
-import { Users } from "@/lib/interface/users-interface";
 
 const Homepage = async () => {
-  // const users = await getUsers();
-
-  const res = await fetch(`${process.env.APP_DOMAIN}/api/users`, {
-    method: "GET",
-  });
-
-  const users: Users[] = await res.json();
+  const users = await getUsers();
 
   return (
     <section className="w-full flex flex-row justify-center items-center py-10">
@@ -25,7 +18,7 @@ const Homepage = async () => {
           </div>
 
           {/* Table + Filter + pagination */}
-          <UserPanel users={users} />
+          {users && <UserPanel users={users} />}
         </div>
       </div>
     </section>
