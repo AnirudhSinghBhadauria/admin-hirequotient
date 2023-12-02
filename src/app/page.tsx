@@ -1,6 +1,6 @@
 import React from "react";
-import { getUsers } from "./lib/hooks/get-users";
 import UserPanel from "@/components/users-panel";
+import { getUsers } from "@/lib/hooks/get-users";
 
 const Homepage = async () => {
   const users = await getUsers();

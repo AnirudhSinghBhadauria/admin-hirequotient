@@ -1,5 +1,5 @@
-import { Users } from "@/app/lib/interface/users-interface";
 import Close from "@/assets/svg/close";
+import { Users } from "@/lib/interface/users-interface";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 
 const Modal = ({

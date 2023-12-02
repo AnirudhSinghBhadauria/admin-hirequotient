@@ -1,20 +1,18 @@
 "use client";
 
-import { Users } from "@/app/lib/interface/users-interface";
+
 import Delete from "@/assets/svg/delete";
 import Edit from "@/assets/svg/edit";
 import React, { useState } from "react";
 import Modal from "./ui/modal";
+import { Users } from "@/lib/interface/users-interface";
 
 const UserPanel = ({ users }: { users: Users[] }) => {
   const [modelOpen, setModalOpen] = useState<boolean>(false);
   const [userData, setUserData] = useState<Users[]>(users);
   const [rowToEdit, setRowToEdit] = useState<number | null>(null);
 
-  console.log(userData);
-
   // Modal logic!
-  const modalOpenHandeler = () => setModalOpen(true);
   const modalCloseHandeler = () => {
     setModalOpen(false);
     setRowToEdit(null);
@@ -22,11 +20,10 @@ const UserPanel = ({ users }: { users: Users[] }) => {
 
   // Delete Rows!
   const handleDeleteRows = (targetIdx: number) => {
-    setUserData(userData.filter(({ id }) => parseInt(id) !== targetIdx));
-    // setUserData((prevUsers) => {
-    //   const newUsers = prevUsers.filter(({ id }) => parseInt(id) !== targetIdx);
-    //   return newUsers;
-    // });
+    setUserData((prevUsers) => {
+      const newUsers = prevUsers.filter(({ id }) => parseInt(id) !== targetIdx);
+      return newUsers;
+    });
   };
 
   // Edit Rows!
@@ -35,6 +32,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
     setModalOpen(true);
   };
 
+  // Handle Submit!
   const handleSubmit = (newRowData: Users) => {
     setUserData(
       userData.map(({ id, name, role, email }) => {
@@ -57,7 +55,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
       {modelOpen && (
         <Modal
           closeModal={modalCloseHandeler}
-          defaultValue={userData[rowToEdit!]}
+          defaultValue={userData[rowToEdit!-1]}
           onSubmit={handleSubmit}
         />
       )}
