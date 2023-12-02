@@ -18,7 +18,7 @@ const Homepage = async () => {
           </div>
 
           {/* Table + Filter + pagination */}
-          {users && <UserPanel users={users} />}
+          <UserPanel users={users} />
         </div>
       </div>
     </section>

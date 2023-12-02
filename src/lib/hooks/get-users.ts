@@ -1,7 +1,7 @@
 import { Users } from "../interface/users-interface";
 
 export const getUsers = async () => {
-  const res = await fetch(`/api/users`, {
+  const res = await fetch(`${process.env.APP_DOMAIN}/api/users`, {
     method: "GET",
   });
 
