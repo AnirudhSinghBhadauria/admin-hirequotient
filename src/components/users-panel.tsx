@@ -2,7 +2,7 @@
 
 import Delete from "@/assets/svg/delete";
 import Edit from "@/assets/svg/edit";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import Modal from "./ui/modal";
 import { Users } from "@/lib/interface/users-interface";
 import PageChange from "@/assets/svg/page-change";
@@ -13,6 +13,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
   const [userData, setUserData] = useState<Users[]>(users);
   const [rowToEdit, setRowToEdit] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [query, setQuery] = useState<string>("");
 
   // Modal logic!
   const modalCloseHandeler = () => {
@@ -51,9 +52,17 @@ const UserPanel = ({ users }: { users: Users[] }) => {
   const usersPerPage = 10;
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
-  const numberOfPages = Math.ceil(userData.length / usersPerPage);
 
-  const usersforCurrentPage = userData.slice(firstIndex, lastIndex);
+  // Filtering Users!
+  let filteredUsers = userData.filter(
+    ({ name, email, role }) =>
+      name.toLowerCase().includes(query.toLowerCase()) ||
+      email.toLowerCase().includes(query.toLowerCase()) ||
+      role.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const numberOfPages = Math.ceil(filteredUsers.length / usersPerPage);
+  let usersforCurrentPage = filteredUsers.slice(firstIndex, lastIndex);
 
   const pageNumbers = [...Array(numberOfPages + 1).keys()].slice(1);
 
@@ -62,6 +71,11 @@ const UserPanel = ({ users }: { users: Users[] }) => {
   const goToPage = (index: number) => setCurrentPage(index + 1);
   const goToFirstPage = () => setCurrentPage(1);
   const goToLastPage = () => setCurrentPage(numberOfPages);
+
+  if (usersforCurrentPage.length === 0) {
+    setQuery("");
+    goToFirstPage();
+  }
 
   // if all users on any page are delelted, we go to the previous page!
   currentPage > numberOfPages && goToPrevPage();
@@ -76,10 +90,15 @@ const UserPanel = ({ users }: { users: Users[] }) => {
           onSubmit={handleSubmit}
         />
       )}
-      {/* Add filter here */}
+      {/* Adding filter here */}
+      <input
+        className="panel-input"
+        type="text"
+        placeholder="Enter value here"
+        onChange={(event) => setQuery(event.target.value)}
+      />
 
-      <input className="panel-input" type="text"placeholder="Enter value here"/>
-
+      {/* Adding Panel Here */}
       <div className="w-full rounded-[7px] my-4 border border-[var(--muted-border)] text-sm">
         <table className="w-full">
           <thead className="[&_tr]:border-b border-[var(--muted-border)]">
