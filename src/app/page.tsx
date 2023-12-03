@@ -1,9 +1,26 @@
 import React from "react";
 import UserPanel from "@/components/users-panel";
 import { getUsers } from "@/lib/hooks/get-users";
+import { Users } from "@/lib/interface/users-interface";
 
 const Homepage = async () => {
+  // Directly Fetching data in server component on server side! That's the beauty of next14!
   const users = await getUsers();
+  // let usersForCurrentPage = users;
+
+  // const getUserDataFromPanel = async (userData: Users[]) => {
+  //   "use server";
+
+  //   const page = searchParams["page"] ?? "1";
+  //   const per_page = searchParams["per_page"] ?? "10";
+
+  //   const start = (Number(page) - 1) * Number(per_page);
+  //   const end = start + Number(per_page);
+
+  //   usersForCurrentPage = userData.slice(start, end);
+
+  //   console.log(userData);
+  // };
 
   return (
     <section className="w-full flex flex-row justify-center items-center py-10">
@@ -16,9 +33,12 @@ const Homepage = async () => {
               Here's a list of your active users!
             </p>
           </div>
-
           {/* Table + Filter + pagination */}
-          {users && <UserPanel users={users} />}
+          <UserPanel
+            users={users}
+            // updateUsers={usersForCurrentPage}
+            // getUser={getUserDataFromPanel}
+          />
         </div>
       </div>
     </section>

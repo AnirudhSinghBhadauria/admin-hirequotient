@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --accent: hsl(240 4.8% 95.9%);
     --primary: hsl(240, 10%, 10%);
     --foreground: hsl(0 0% 100% 0.8);
     --muted: hsl(0, 0%, 96%);
@@ -11,6 +12,7 @@
     --muted-border: hsl(220, 13%, 91%);
     --muted-foreground: hsl(240 3.8% 46.1%);
     --muted-background: hsl(240, 10%, 4%);
+    --accent-foreground: hsl(240 5.9% 10%);
   }
 
   body {
@@ -47,8 +49,15 @@
     background-color: rgba(255, 255, 255, 0.707);
   }
 
-  .modal-form-ring {
+  .modal-form-input {
     @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 col-span-3;
   }
-}
 
+  .panel-input {
+    @apply flex rounded-md border border-[var(--muted-border)] bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-[var(--muted-foreground)] focus-visible:outline-none focus-visible:ring-1 ring-gray-400 disabled:cursor-not-allowed disabled:opacity-50 h-8 w-[350px];
+  }
+
+  .pagination-button {
+    @apply items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-[var(--muted-border)] bg-transparent shadow-sm hover:bg-[var(--accent)] hover:text-black h-8 w-8 p-0 flex;
+  }
+}

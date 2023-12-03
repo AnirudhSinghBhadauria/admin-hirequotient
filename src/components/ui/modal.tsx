@@ -11,8 +11,8 @@ const Modal = ({
   defaultValue: Users;
   onSubmit: (newRowData: Users) => void;
 }) => {
-  // Closing modal handeler!
-  const modalCloseHandeler = () => closeModal();
+  // Form validation!
+  const [isDisabled, setIsDisabled] = useState<boolean>();
 
   // Form State Handeler!
   const [formData, setFormData] = useState(
@@ -24,11 +24,16 @@ const Modal = ({
     }
   );
 
+  // Closing modal handeler!
+  const modalCloseHandeler = () => closeModal();
+
   // could have used Server actions for forms, but since most the app is running on client,
   // server action wouldn't make much of a difference.
   const handleFormChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    !event.target.value ? setIsDisabled(true) : setIsDisabled(false);
+
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
@@ -57,7 +62,7 @@ const Modal = ({
               Name
             </label>
             <input
-              className="modal-form-ring"
+              className="modal-form-input"
               type="text"
               id="name"
               name="name"
@@ -71,7 +76,7 @@ const Modal = ({
               Email
             </label>
             <input
-              className="modal-form-ring "
+              className="modal-form-input"
               type="text"
               id="email"
               name="email"
@@ -87,9 +92,9 @@ const Modal = ({
             <select
               id="role"
               name="role"
-              className="modal-form-ring"
+              className="modal-form-input"
               value={formData.role}
-              onChange={handleFormChange} 
+              onChange={handleFormChange}
             >
               <option value="member">Member</option>
               <option value="admin">Admin</option>
@@ -97,8 +102,9 @@ const Modal = ({
           </div>
 
           <button
+            disabled={isDisabled}
             onClick={handleSubmit}
-            className="mt-[1rem] inline-flex items-center justify-end justify-self-end whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[var(--primary)] text-white hover:bg-[#17171c]/90 max-w-fit h-10 px-4 py-2"
+            className="mt-[1rem] inline-flex items-center justify-end justify-self-end whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 bg-[var(--primary)] text-white hover:bg-[#17171c]/90 max-w-fit h-10 px-4 py-2"
           >
             Save changes
           </button>
@@ -116,3 +122,7 @@ const Modal = ({
 };
 
 export default Modal;
+
+// TODO -
+
+// Form validation
