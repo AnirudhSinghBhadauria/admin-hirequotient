@@ -1,31 +1,39 @@
 import React from "react";
 import UserPanel from "@/components/users-panel";
 import { getUsers } from "@/lib/hooks/get-users";
-import { Users } from "@/lib/interface/users-interface";
+import Link from "next/link";
+import Github from "@/assets/svg/git";
 
 const Homepage = async () => {
   // Directly Fetching data in server component on server side! That's the beauty of next14!
   const users = await getUsers();
-  // let usersForCurrentPage = users;
-
-  // const getUserDataFromPanel = async (userData: Users[]) => {
-  //   "use server";
-
-  //   const page = searchParams["page"] ?? "1";
-  //   const per_page = searchParams["per_page"] ?? "10";
-
-  //   const start = (Number(page) - 1) * Number(per_page);
-  //   const end = start + Number(per_page);
-
-  //   usersForCurrentPage = userData.slice(start, end);
-
-  //   console.log(userData);
-  // };
-
   return (
     <section className="w-full flex flex-row justify-center items-center py-10">
       <div className="w-full max-w-[1400px] px-8">
         {/* Add Heading text here! */}
+        <section className="relative flex w-full flex-col items-start gap-2 px-4 pt-12 pb-12">
+          <div className="inline-flex items-center rounded-lg bg-[var(--muted)] px-3 py-1 text-sm font-medium space-x-2">
+            <p>🎉</p>
+            <p>Welcome to our new admin panel !</p>
+          </div>
+          <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1] hidden md:block">
+            Gateway to seamless control
+          </h1>
+          <p className="max-w-[650px] text-lg text-[var(--muted-foreground)] sm:text-xl">
+            Take control of your experience and manage everything from one
+            convenient place. Streamline your tasks, access powerful tools, and
+            customize your settings effortlessly.{" "}
+          </p>
+
+          <Link
+            className="absolute top-0 right-0"
+            href="https://github.com/AnirudhSinghBhadauria/admin-hirequotient"
+            target="_blank"
+          >
+            <Github />
+          </Link>
+        </section>
+
         <div className="border-[1px] border-[var(--muted-border)] shadow rounded-[0.5rem] p-8">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
@@ -33,12 +41,8 @@ const Homepage = async () => {
               Here's a list of your active users!
             </p>
           </div>
-          {/* Table + Filter + pagination */}
-          <UserPanel
-            users={users}
-            // updateUsers={usersForCurrentPage}
-            // getUser={getUserDataFromPanel}
-          />
+          {/* Panel + Filter + pagination */}
+          <UserPanel users={users} />
         </div>
       </div>
     </section>

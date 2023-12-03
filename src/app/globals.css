@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
+    --muted: hsl(0, 0%, 96%);
     --accent: hsl(240 4.8% 95.9%);
     --primary: hsl(240, 10%, 10%);
     --foreground: hsl(0 0% 100% 0.8);
-    --muted: hsl(0, 0%, 96%);
-    --muted-faded: hsl(0, 0%, 96%, 0.5);
     --muted-border: hsl(220, 13%, 91%);
-    --muted-foreground: hsl(240 3.8% 46.1%);
+    --muted-faded: hsl(0, 0%, 96%, 0.5);
     --muted-background: hsl(240, 10%, 4%);
     --accent-foreground: hsl(240 5.9% 10%);
+    --muted-foreground: hsl(240 3.8% 46.1%);
   }
 
   body {
@@ -51,6 +51,10 @@
 
   .modal-form-input {
     @apply flex h-10 w-full rounded-md border px-3 py-2 text-sm bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 col-span-3;
+  }
+
+  .modal-save {
+    @apply mt-[1rem] inline-flex items-center justify-end justify-self-end whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 bg-[var(--primary)] text-white hover:bg-[#17171c]/90 max-w-fit h-10 px-4 py-2;
   }
 
   .panel-input {

@@ -2,15 +2,19 @@
 
 import Delete from "@/assets/svg/delete";
 import Edit from "@/assets/svg/edit";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import Modal from "./ui/modal";
 import { Users } from "@/lib/interface/users-interface";
 import PageChange from "@/assets/svg/page-change";
 import LastPage from "@/assets/svg/last-page";
+import Image from "next/image";
+import { getImage } from "@/assets/images/img";
 
 const UserPanel = ({ users }: { users: Users[] }) => {
   const [modelOpen, setModalOpen] = useState<boolean>(false);
-  const [userData, setUserData] = useState<Users[]>(users);
+  const [userData, setUserData] = useState<Users[]>(
+    users.map((properties) => ({ ...properties, picture: getImage() }))
+  );
   const [rowToEdit, setRowToEdit] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [query, setQuery] = useState<string>("");
@@ -38,11 +42,13 @@ const UserPanel = ({ users }: { users: Users[] }) => {
   // Handle Submit!
   const handleSubmit = (newRowData: Users) => {
     setUserData((prevUserData) => {
-      const newUserData = prevUserData.map(({ id, name, role, email }) => {
-        if (id !== rowToEdit) return { name, id, email, role };
+      const newUserData = prevUserData.map(
+        ({ id, name, role, email, picture }) => {
+          if (id !== rowToEdit) return { name, id, email, role, picture };
 
-        return newRowData;
-      });
+          return newRowData;
+        }
+      );
 
       return newUserData;
     });
@@ -53,7 +59,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
 
-  // Filtering Users!
+  // Filtering Users using name, email and role!
   let filteredUsers = userData.filter(
     ({ name, email, role }) =>
       name.toLowerCase().includes(query.toLowerCase()) ||
@@ -66,19 +72,22 @@ const UserPanel = ({ users }: { users: Users[] }) => {
 
   const pageNumbers = [...Array(numberOfPages + 1).keys()].slice(1);
 
+  // Page Navigation
   const goToNextPage = () => setCurrentPage(currentPage + 1);
   const goToPrevPage = () => setCurrentPage(currentPage - 1);
   const goToPage = (index: number) => setCurrentPage(index + 1);
   const goToFirstPage = () => setCurrentPage(1);
   const goToLastPage = () => setCurrentPage(numberOfPages);
 
-  if (usersforCurrentPage.length === 0) {
+  if (!usersforCurrentPage.length) {
     setQuery("");
     goToFirstPage();
   }
 
   // if all users on any page are delelted, we go to the previous page!
   currentPage > numberOfPages && goToPrevPage();
+
+  console.log(userData);
 
   return (
     <section className="w-full mt-8">
@@ -94,7 +103,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
       <input
         className="panel-input"
         type="text"
-        placeholder="Enter value here"
+        placeholder="Search users..."
         onChange={(event) => setQuery(event.target.value)}
       />
 
@@ -103,6 +112,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
         <table className="w-full">
           <thead className="[&_tr]:border-b border-[var(--muted-border)]">
             <tr className="flex flex-row">
+              <th className="table-header flex-[1] py-3 pl-10">Profile</th>
               <th className="table-header flex-[1] py-3 pl-10">Name</th>
               <th className="table-header flex-[2] py-3 pl-36">Email</th>
               <th className="table-header flex-[1] py-3 pl-20">Role</th>
@@ -111,32 +121,44 @@ const UserPanel = ({ users }: { users: Users[] }) => {
           </thead>
 
           <tbody className="[&_tr]:border-b border-[var(--muted-border)]">
-            {usersforCurrentPage.map(({ id, name, email, role }) => (
-              <tr
-                key={id}
-                className="flex flex-row justify-evenly items-center transition-colors hover:bg-[var(--muted-faded)]"
-              >
-                <td className="table-body flex-[1] py-3 pl-10">{name}</td>
-                <td className="table-body flex-[2] py-3 pl-36">{email}</td>
-                <td className="table-body flex-[1] py-3 pl-20">{role}</td>
-                <td className="table-body flex-[1] py-3 pl-20">
-                  <div className="flex flex-row space-x-3 items-center">
-                    <button
-                      onClick={() => handleEditRow(id)}
-                      className="p-[6px] rounded-lg transition-colors hover:bg-gray-200/50"
-                    >
-                      <Edit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteRows(id)}
-                      className="p-[6px] rounded-lg transition-colors hover:bg-red-200/80"
-                    >
-                      <Delete />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {(usersforCurrentPage.map(({ id, name, email, role, picture }) => {
+              return (
+                <tr
+                  key={id}
+                  className="flex flex-row justify-evenly items-center transition-colors hover:bg-[var(--muted-faded)]"
+                >
+                  <td className="table-body flex-[1] py-3 pl-10">
+                    <Image
+                      src={picture}
+                      alt="display-picture"
+                      width="40"
+                      height="40"
+                      priority
+                      className="rounded-full"
+                    />
+                  </td>
+                  <td className="table-body flex-[1] py-3 pl-10">{name}</td>
+                  <td className="table-body flex-[2] py-3 pl-36">{email}</td>
+                  <td className="table-body flex-[1] py-3 pl-20">{role}</td>
+                  <td className="table-body flex-[1] py-3 pl-20">
+                    <div className="flex flex-row space-x-3 items-center">
+                      <button
+                        onClick={() => handleEditRow(id)}
+                        className="p-[6px] rounded-lg transition-colors hover:bg-gray-200/50 edit"
+                      >
+                        <Edit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteRows(id)}
+                        className="p-[6px] rounded-lg transition-colors hover:bg-red-200/80 delete"
+                      >
+                        <Delete />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            }))}
           </tbody>
         </table>
       </div>
@@ -153,7 +175,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
               <button
                 disabled={currentPage === 1}
                 onClick={goToFirstPage}
-                className="pagination-button rotate-180"
+                className="pagination-button rotate-180 first-page"
               >
                 <LastPage />
               </button>
@@ -162,7 +184,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
               <button
                 disabled={currentPage === 1}
                 onClick={goToPrevPage}
-                className="pagination-button rotate-180"
+                className="pagination-button rotate-180 next-page"
               >
                 <PageChange />
               </button>
@@ -182,7 +204,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
               <button
                 disabled={currentPage === numberOfPages}
                 onClick={goToNextPage}
-                className="pagination-button"
+                className="pagination-button previous-page"
               >
                 <PageChange />
               </button>
@@ -191,7 +213,7 @@ const UserPanel = ({ users }: { users: Users[] }) => {
               <button
                 disabled={currentPage === numberOfPages}
                 onClick={goToLastPage}
-                className="pagination-button"
+                className="pagination-button last-page"
               >
                 <LastPage />
               </button>

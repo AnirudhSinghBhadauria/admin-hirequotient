@@ -16,6 +16,7 @@ const Modal = ({
 
   // Form State Handeler!
   const [formData, setFormData] = useState(
+  // Here, defaultValue will try to pre-hyderate the input!
     defaultValue || {
       id: "",
       name: "",
@@ -32,8 +33,10 @@ const Modal = ({
   const handleFormChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    // Disable event for modal form button
     !event.target.value ? setIsDisabled(true) : setIsDisabled(false);
 
+    // using 'name' to change values of name, email, properties
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
@@ -104,7 +107,8 @@ const Modal = ({
           <button
             disabled={isDisabled}
             onClick={handleSubmit}
-            className="mt-[1rem] inline-flex items-center justify-end justify-self-end whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 bg-[var(--primary)] text-white hover:bg-[#17171c]/90 max-w-fit h-10 px-4 py-2"
+            className="modal-save save"
+            type="submit"
           >
             Save changes
           </button>
@@ -122,7 +126,3 @@ const Modal = ({
 };
 
 export default Modal;
-
-// TODO -
-
-// Form validation
